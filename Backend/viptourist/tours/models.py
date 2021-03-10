@@ -79,12 +79,19 @@ class Offer(models.Model):
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name='offers')
     tour = models.ForeignKey(Tour, on_delete=models.SET_NULL, null=True, blank=True, related_name='offers')
     price = models.DecimalField(max_digits=6, decimal_places=2)
+
     included = models.TextField(help_text='the list must be separated by commas')
     excluded = models.TextField(help_text='the list must be separated by commas')
+
     transfer = models.BooleanField(default=False)
     transfer_detail = models.TextField(null=True)
+
     languages = models.TextField(help_text='the list must be separated by commas')
+    times = models.CharField(max_length=150, null=True, blank=True, help_text='the list must be separated by commas')
+    age_restrictions = models.TextField(null=True, blank=True)
+
     active = models.BooleanField(default=False)
+
     register_date = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
