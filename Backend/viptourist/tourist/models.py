@@ -12,7 +12,7 @@ class Tourist(models.Model):
     whatsapp = models.CharField(max_length=25)
     avatar = ThumbnailerImageField(upload_to='tourists_avatars/', resize_source={'size': (400, 400), 'crop': 'scale'})
     active = models.BooleanField(default=True)
-    balance = models.DecimalField(max_digits=6, decimal_places=2)
+    balance = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     register_date = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

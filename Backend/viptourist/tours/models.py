@@ -15,6 +15,7 @@ class Category(models.Model):
         return self.title
 
     class Meta:
+        verbose_name_plural = 'Categories'
         ordering = ('order',)
 
 
@@ -38,13 +39,16 @@ class City(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        verbose_name_plural = 'Cities'
+
 
 class Tour(models.Model):
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True, blank=True, related_name='tours')
     category = models.ManyToManyField(Category, related_name='tours')
     title = models.CharField(max_length=255, db_index=True)
     image = ThumbnailerImageField(upload_to='tours/', resize_source={'size': (300, 300), 'crop': 'scale'})
-    duration = models.CharField(max_length=50)
+    duration = models.DecimalField('Duration (hours)', max_digits=3, decimal_places=2, default=0)
     short_description = RichTextUploadingField()
     description = RichTextUploadingField()
     important_information = RichTextUploadingField(null=True)
@@ -53,6 +57,7 @@ class Tour(models.Model):
     prohibited = models.TextField(help_text='the list must be separated by commas', null=True)
     views = models.IntegerField(default=0)
     rating = models.PositiveSmallIntegerField(default=5)
+    active = models.BooleanField(default=False)
     publication_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now_add=True)
 
@@ -60,7 +65,7 @@ class Tour(models.Model):
         return self.title
 
     class Meta:
-        ordering = ('publication_date',)
+        ordering = ('-publication_date',)
 
 
 class TourImage(models.Model):
@@ -75,10 +80,21 @@ class TourImage(models.Model):
         ordering = ('order',)
 
 
+class OfferLanguage(models.Model):
+    language = models.CharField(max_length=50)
+    order = models.PositiveSmallIntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return self.language
+
+    class Meta:
+        ordering = ('order',)
+
+
 class Offer(models.Model):
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name='offers')
     tour = models.ForeignKey(Tour, on_delete=models.SET_NULL, null=True, blank=True, related_name='offers')
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    price = models.DecimalField('Price USD', max_digits=6, decimal_places=2)
 
     included = models.TextField(help_text='the list must be separated by commas')
     excluded = models.TextField(help_text='the list must be separated by commas')
@@ -86,9 +102,10 @@ class Offer(models.Model):
     transfer = models.BooleanField(default=False)
     transfer_detail = models.TextField(null=True)
 
-    languages = models.TextField(help_text='the list must be separated by commas')
+    languages = models.ManyToManyField(OfferLanguage, blank=True, related_name='offers')
     times = models.CharField(max_length=150, null=True, blank=True, help_text='the list must be separated by commas')
-    age_restrictions = models.TextField(null=True, blank=True)
+    min_age = models.PositiveSmallIntegerField(default=2)
+    max_age = models.PositiveSmallIntegerField(default=80)
 
     active = models.BooleanField(default=False)
 
@@ -96,9 +113,9 @@ class Offer(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.seller} - {self.tour}'
+        return f'Offer id: {self.id}. Seller: {self.seller}'
 
     class Meta:
-        ordering = ('-updated',)
+        ordering = ('-register_date',)
 
 
