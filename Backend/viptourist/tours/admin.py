@@ -40,10 +40,18 @@ class CountryAdmin(admin.ModelAdmin):
 
 @admin.register(City)
 class CityAdmin(admin.ModelAdmin):
-    list_display = ('title', 'country', 'slug')
-    list_editable = ('slug',)
+    list_display = ('get_image', 'title', 'country', 'slug', 'order')
+    list_editable = ('slug', 'order')
     list_filter = ('country',)
     search_fields = ('title',)
+    readonly_fields = ('get_image',)
+
+    def get_image(self, obj):
+        if obj.image:
+            return mark_safe(
+                f'<img src={obj.image.url} style="height: 70px; width: 50px; object-fit: cover; border-radius: 5px">')
+
+    get_image.short_description = 'Miniature'
 
 
 class TourImageInline(admin.TabularInline):
