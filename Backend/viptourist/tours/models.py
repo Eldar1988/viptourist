@@ -34,13 +34,17 @@ class Country(models.Model):
 class City(models.Model):
     country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True, related_name='cities')
     title = models.CharField(max_length=255, db_index=True)
+    image = ThumbnailerImageField(upload_to='tours/', resize_source={'size': (400, 400), 'crop': 'scale'}, blank=True,
+                                  null=True)
     slug = models.SlugField(db_index=True, unique=True)
+    order = models.PositiveSmallIntegerField(null=True, blank=True)
 
     def __str__(self):
         return self.title
 
     class Meta:
         verbose_name_plural = 'Cities'
+        ordering = ('order',)
 
 
 class Tour(models.Model):
