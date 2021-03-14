@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'easy_thumbnails',
+    'drf_yasg',
 
     'tours',
     'seller',
@@ -125,9 +126,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_URL = '/media/'
+MEDIA_URL = 'http://192.168.0.199:8000/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 
 CORS_ORIGIN_ALLOW_ALL = True
 
