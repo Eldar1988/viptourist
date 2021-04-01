@@ -29,6 +29,7 @@ class TourReview(models.Model):
     seller = models.ForeignKey(Seller, on_delete=models.SET_NULL, null=True, blank=True, related_name='reviews')
     tourist = models.ForeignKey(Tourist, on_delete=models.SET_NULL, null=True, blank=True, related_name='reviews')
     rating = models.PositiveSmallIntegerField()
+    public = models.BooleanField(default=False)
     text = models.TextField('Review text')
     date = models.DateTimeField(auto_now_add=True)
 
@@ -49,3 +50,44 @@ class ReviewPhoto(models.Model):
 
     class Meta:
         ordering = ('-date',)
+
+
+class ForTouristNotification(models.Model):
+    tourist = models.ForeignKey(Tourist, on_delete=models.SET_NULL, null=True, blank=True, related_name='notifications')
+    title = models.CharField(max_length=255)
+    text = models.TextField()
+    confirmed = models.BooleanField(default=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ('-created_date',)
+
+
+class TouristAction(models.Model):
+    tourist = models.ForeignKey(Tourist, on_delete=models.SET_NULL, null=True, blank=True, related_name='actions')
+    title = models.CharField(max_length=255)
+    action = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ('-date',)
+
+
+class ForAllTouristNotification(models.Model):
+    title = models.CharField(max_length=255)
+    text = models.TextField()
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ('-created_date',)

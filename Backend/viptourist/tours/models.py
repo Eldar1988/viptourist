@@ -74,7 +74,7 @@ class Tour(models.Model):
 
 class TourImage(models.Model):
     tour = models.ForeignKey(Tour, on_delete=models.SET_NULL, null=True, blank=True, related_name='images')
-    image = ThumbnailerImageField(upload_to='tours/', resize_source={'size': (300, 300), 'crop': 'scale'})
+    image = ThumbnailerImageField(upload_to='tours/', resize_source={'size': (1000, 1000), 'crop': 'scale'})
     order = models.PositiveSmallIntegerField(null=True, blank=True)
 
     def __str__(self):
@@ -95,10 +95,22 @@ class OfferLanguage(models.Model):
         ordering = ('order',)
 
 
+class OfferTime(models.Model):
+    time = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.time
+
+    class Meta:
+        ordering = ('time',)
+
+
 class Offer(models.Model):
+    active = models.BooleanField(default=False)
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name='offers')
     tour = models.ForeignKey(Tour, on_delete=models.SET_NULL, null=True, blank=True, related_name='offers')
     price = models.DecimalField('Price USD', max_digits=6, decimal_places=2)
+    children_price = models.DecimalField('Children price USD', max_digits=6, decimal_places=2, null=True, blank=True)
 
     included = models.TextField(help_text='the list must be separated by commas')
     excluded = models.TextField(help_text='the list must be separated by commas')
@@ -107,11 +119,9 @@ class Offer(models.Model):
     transfer_detail = models.TextField(null=True)
 
     languages = models.ManyToManyField(OfferLanguage, blank=True, related_name='offers')
-    times = models.CharField(max_length=150, null=True, blank=True, help_text='the list must be separated by commas')
+    times = models.ManyToManyField(OfferTime, blank=True, related_name='offers')
     min_age = models.PositiveSmallIntegerField(default=2)
     max_age = models.PositiveSmallIntegerField(default=80)
-
-    active = models.BooleanField(default=False)
 
     register_date = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -123,3 +133,9 @@ class Offer(models.Model):
         ordering = ('-register_date',)
 
 
+class OfferImage(models.Model):
+    offer = models.ForeignKey(Offer, on_delete=models.SET_NULL, null=True, blank=True, related_name='images')
+    image = ThumbnailerImageField(upload_to='tours/', resize_source={'size': (1000, 1000), 'crop': 'scale'})
+
+    def __str__(self):
+        return f'{self.id}'

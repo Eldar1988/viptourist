@@ -1,6 +1,7 @@
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from .serializers import CityListSerializer, CountrySerializer, TourListSerializer, CategoryListSerializer, \
     CitySearchListSerializer
@@ -17,10 +18,9 @@ class CountriesListView(APIView):
         return Response(serializer.data)
 
 
-class ToursListSortedByCategoryView(generics.ListAPIView):
+class ToursListSortedByCategoryView(APIView):
     """Tours list sorted by category. Filters: city :str, price :float, start_time :str """
-    serializer_class = CategoryListSerializer
-
-    def get_queryset(self):
-        city_slug = self.kwargs['city_slug']
-        return Category.objects.filter(tours__city__slug=city_slug).distinct()
+    def get(self, request, city_slug):
+        categories = Category.objects.filter(tours__city__slug=city_slug).distinct()
+        serializer = CategoryListSerializer(categories, many=True)
+        return Response(serializer.data)

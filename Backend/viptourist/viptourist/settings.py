@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+import datetime
 import os
 from pathlib import Path
 
@@ -36,17 +37,20 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'djoser',
     'rest_framework',
     'corsheaders',
     'ckeditor',
     'ckeditor_uploader',
     'easy_thumbnails',
     'drf_yasg',
+    'rest_framework_simplejwt',
 
     'tours',
     'seller',
     'orders',
-    'tourist'
+    'tourist',
+    'mainapp',
 ]
 
 MIDDLEWARE = [
@@ -126,7 +130,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_URL = 'http://192.168.0.199:8000/media/'
+# MEDIA_URL = 'http://192.168.0.199:8000/media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -134,6 +139,9 @@ CORS_ORIGIN_ALLOW_ALL = True
 REST_FRAMEWORK = {
     'DATE_FORMAT': "%d.%m.%Y",
     'TIME_FORMAT': "%H:%M",
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
 }
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
@@ -163,4 +171,16 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'unique-snowflake'
     }
+}
+
+JWT_AUTH = {
+    # how long the original token is valid for
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=100),
+
+    # allow refreshing of tokens
+    'JWT_ALLOW_REFRESH': False,
+
+    # this is the maximum time AFTER the token was issued that
+    # it can be refreshed.  exprired tokens can't be refreshed.
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
 }

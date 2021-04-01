@@ -35,3 +35,45 @@ class Document(models.Model):
 
     class Meta:
         ordering = ('upload_date',)
+
+
+class ForSellerNotification(models.Model):
+    seller = models.ForeignKey(Seller, on_delete=models.SET_NULL, null=True, blank=True, related_name='знерщт')
+    title = models.CharField(max_length=255)
+    text = models.TextField()
+    confirmed = models.BooleanField(default=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ('-created_date',)
+
+
+class SellerAction(models.Model):
+    seller = models.ForeignKey(Seller, on_delete=models.SET_NULL, null=True, blank=True, related_name='actions')
+    title = models.CharField(max_length=255)
+    action = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ('-date',)
+
+
+class ForAllSellersNotification(models.Model):
+    title = models.CharField(max_length=255)
+    text = models.TextField()
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ('-created_date',)
+

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import main from './modules/main'
 
 // import example from './module-example'
 
@@ -17,7 +18,14 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      // example
+      main
+    },
+
+    state: {
+      serverURL: 'http://192.168.0.199:8000/api'
+    },
+    getters: {
+      getServerURL: state => state.serverURL
     },
 
     // enable strict mode (adds overhead!)

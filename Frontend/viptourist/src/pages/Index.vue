@@ -1,14 +1,16 @@
 <template>
-  <q-page class="flex flex-center">
-    <img
-      alt="Quasar logo"
-      src="~assets/quasar-logo-full.svg"
-    >
+  <q-page class="">
+    <vip-first-screen />
   </q-page>
 </template>
 
 <script>
+import VipFirstScreen from "components/home/vipFirstScreen";
 export default {
-  name: 'PageIndex'
+  name: 'PageIndex',
+  components: {VipFirstScreen},
+  preFetch({store}) {
+    return store.dispatch('fetchHomeSlides')
+  }
 }
 </script>

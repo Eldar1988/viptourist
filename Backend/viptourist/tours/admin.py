@@ -1,10 +1,23 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Category, Country, City, Tour, TourImage, Offer, OfferLanguage
+from .models import Category, Country, City, Tour, TourImage, Offer, OfferLanguage, OfferTime, OfferImage
 
 
 admin.site.register(OfferLanguage)
+admin.site.register(OfferTime)
+
+
+class OfferImageInline(admin.TabularInline):
+    model = OfferImage
+    extra = 1
+    readonly_fields = ('get_image',)
+
+    def get_image(self, obj):
+        return mark_safe(
+            f'<img src={obj.image.url} style="height: 50px; width: 70px; object-fit: cover; border-radius: 5px">')
+
+    get_image.short_description = 'Miniature'
 
 
 @admin.register(Offer)
@@ -13,7 +26,11 @@ class OfferAdmin(admin.ModelAdmin):
     list_editable = ('active',)
     list_filter = ('active', 'languages', 'tour', 'seller', 'register_date', 'updated')
     search_fields = ('tour__title', 'seller__name')
-    filter_horizontal = ('languages',)
+    filter_horizontal = ('languages', 'times')
+
+    inlines = [OfferImageInline]
+
+    save_as = True
 
 
 @admin.register(Category)
@@ -29,6 +46,8 @@ class CategoryAdmin(admin.ModelAdmin):
             f'<img src={obj.image.url} style="height: 70px; width: 50px; object-fit: cover; border-radius: 5px">')
 
     get_image.short_description = 'Miniature'
+
+    save_as = True
 
 
 @admin.register(Country)
