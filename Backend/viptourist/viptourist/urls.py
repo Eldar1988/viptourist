@@ -10,8 +10,8 @@ urlpatterns = [
     path('tours/', include('tours.urls')),
     path('main/', include('mainapp.urls')),
     path('sellers/', include('seller.urls')),
-    path('yauth/', include('djoser.urls')),
-    path('yauth/', include('djoser.urls.jwt')),
+    # path('yauth/', include('djoser.urls')),
+    # path('yauth/', include('djoser.urls.jwt')),
 ]
 
 urlpatterns += doc_urls
