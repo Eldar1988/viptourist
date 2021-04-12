@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import HomeSlide, Faq, Contacts
+from .models import HomeSlide, Faq, Contact
 
 
 class HomeSlideSerializer(serializers.ModelSerializer):
@@ -19,5 +19,5 @@ class FaqSerializer(serializers.ModelSerializer):
 class ContactsSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Contacts
+        model = Contact
         fields = '__all__'

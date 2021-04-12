@@ -1,10 +1,16 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import HomeSlide, Faq, Contacts
+from .models import HomeSlide, Faq, Contact, AppUser
 
 
-admin.site.register(Contacts)
+admin.site.register(Contact)
+
+
+@admin.register(AppUser)
+class AppUserAdmin(admin.ModelAdmin):
+    list_display = ('user_id', 'seller', 'tourist', 'register_date')
+    list_filter = ('seller', 'tourist')
 
 
 @admin.register(Faq)

@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import HomeSlide, Faq, Contacts
+from .models import HomeSlide, Faq, Contact
 from .serializers import HomeSlideSerializer, FaqSerializer, ContactsSerializer
 
 
@@ -31,7 +31,7 @@ class ContactsView(APIView):
 
     def get(self, request):
         """Contacts information"""
-        contacts = Contacts.objects.last()
+        contacts = Contact.objects.last()
         serializer = ContactsSerializer(contacts, many=False)
         return Response(serializer.data)
 

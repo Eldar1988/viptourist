@@ -32,7 +32,8 @@ class SellerActionsInline(admin.TabularInline):
 
 @admin.register(Seller)
 class SellerAdmin(admin.ModelAdmin):
-    list_display = ('get_image', 'user', 'company', 'name', 'phone', 'whatsapp', 'active', 'balance', 'register_date')
+    list_display = ('get_image', 'user', 'company', 'name', 'phone', 'whatsapp', 'email', 'active', 'balance',
+                    'register_date')
     list_editable = ('active',)
     list_filter = ('active', 'register_date', 'updated')
     search_fields = ('name', 'company', 'phone', 'whatsapp')
@@ -50,14 +51,6 @@ class SellerAdmin(admin.ModelAdmin):
     def get_image_full_size(self, obj):
         return mark_safe(
             f'<img src={obj.avatar.url} style="height: 250px; width: 250px; object-fit: cover; border-radius: 5px">')
-
-
-# @admin.register(Document)
-# class DocumentAdmin(admin.ModelAdmin):
-#     list_display = ('seller', 'title', 'file', 'confirmed', 'upload_date', 'updated')
-#     list_editable = ('confirmed',)
-#     search_fields = ('title',)
-#     list_filter = ('upload_date', 'updated')
 
 
 @admin.register(ForAllSellersNotification)

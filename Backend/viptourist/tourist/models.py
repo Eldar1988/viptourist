@@ -3,13 +3,15 @@ from django.db import models
 from easy_thumbnails.fields import ThumbnailerImageField
 from tours.models import Tour, Offer
 from seller.models import Seller
+from mainapp.models import AppUser
 
 
 class Tourist(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='tourist')
+    user = models.OneToOneField(AppUser, on_delete=models.SET_NULL, null=True, blank=True)
     name = models.CharField(max_length=255, db_index=True)
     phone = models.CharField(max_length=25)
     whatsapp = models.CharField(max_length=25)
+    email = models.EmailField(null=True, blank=True)
     avatar = ThumbnailerImageField(upload_to='tourists_avatars/', resize_source={'size': (400, 400), 'crop': 'scale'})
     active = models.BooleanField(default=True)
     balance = models.DecimalField(max_digits=6, decimal_places=2, default=0)

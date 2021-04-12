@@ -8,19 +8,16 @@ from .serializers import CityListSerializer, CountrySerializer, TourListSerializ
 from .models import Country, Category, City, Tour
 
 
-class CountriesListView(APIView):
-
-    def get(self, request):
-        """Countries > Cities list"""
-        countries = Country.objects.all()
-        serializer = CountrySerializer(countries, many=True)
-
-        return Response(serializer.data)
+class CountriesListView(generics.ListAPIView):
+    """Countries and cities view"""
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
 
 
 class ToursListSortedByCategoryView(APIView):
     """Tours list sorted by category. Filters: city :str, price :float, start_time :str """
     def get(self, request, city_slug):
         categories = Category.objects.filter(tours__city__slug=city_slug).distinct()
+
         serializer = CategoryListSerializer(categories, many=True)
         return Response(serializer.data)

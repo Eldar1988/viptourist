@@ -14,8 +14,9 @@ class OfferImageInline(admin.TabularInline):
     readonly_fields = ('get_image',)
 
     def get_image(self, obj):
-        return mark_safe(
-            f'<img src={obj.image.url} style="height: 50px; width: 70px; object-fit: cover; border-radius: 5px">')
+        if obj.image:
+            return mark_safe(
+                f'<img src={obj.image.url} style="height: 50px; width: 70px; object-fit: cover; border-radius: 5px">')
 
     get_image.short_description = 'Miniature'
 
@@ -35,33 +36,10 @@ class OfferAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('get_image', 'title', 'slug', 'order')
-    list_editable = ('slug', 'order')
+    list_display = ('get_image', 'title', 'order')
+    prepopulated_fields = {"slug": ("title",)}
+    list_editable = ('order',)
     list_display_links = ('get_image', 'title')
-    search_fields = ('title',)
-    readonly_fields = ('get_image',)
-
-    def get_image(self, obj):
-        return mark_safe(
-            f'<img src={obj.image.url} style="height: 70px; width: 50px; object-fit: cover; border-radius: 5px">')
-
-    get_image.short_description = 'Miniature'
-
-    save_as = True
-
-
-@admin.register(Country)
-class CountryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'slug')
-    list_editable = ('slug',)
-    search_fields = ('title',)
-
-
-@admin.register(City)
-class CityAdmin(admin.ModelAdmin):
-    list_display = ('get_image', 'title', 'country', 'slug', 'order')
-    list_editable = ('slug', 'order')
-    list_filter = ('country',)
     search_fields = ('title',)
     readonly_fields = ('get_image',)
 
@@ -72,6 +50,40 @@ class CityAdmin(admin.ModelAdmin):
 
     get_image.short_description = 'Miniature'
 
+    save_as = True
+
+
+@admin.register(Country)
+class CountryAdmin(admin.ModelAdmin):
+    list_display = ('title', 'slug')
+    prepopulated_fields = {"slug": ("title",)}
+    list_editable = ('slug',)
+    search_fields = ('title',)
+
+
+@admin.register(City)
+class CityAdmin(admin.ModelAdmin):
+    list_display = ('get_image', 'title', 'country', 'order')
+    prepopulated_fields = {"slug": ("title",)}
+    list_editable = ('order',)
+    list_filter = (('country', admin.RelatedOnlyFieldListFilter),)
+    search_fields = ('title',)
+    readonly_fields = ('get_medium_image',)
+
+    def get_image(self, obj):
+        if obj.image:
+            return mark_safe(
+                f'<img src={obj.image.url} style="height: 50px; width: 70px; object-fit: cover; border-radius: 5px">')
+
+
+    def get_medium_image(self, obj):
+        if obj.image:
+            return mark_safe(
+                f'<img src={obj.image.url} style="height: 150px; width: 210px; object-fit: cover; border-radius: 5px">')
+
+    get_image.short_description = 'Miniature'
+    get_medium_image.short_description = 'Miniature'
+
 
 class TourImageInline(admin.TabularInline):
     model = TourImage
@@ -79,8 +91,9 @@ class TourImageInline(admin.TabularInline):
     readonly_fields = ('get_image',)
 
     def get_image(self, obj):
-        return mark_safe(
-            f'<img src={obj.image.url} style="height: 50px; width: 70px; object-fit: cover; border-radius: 5px">')
+        if obj.image:
+            return mark_safe(
+                f'<img src={obj.image.url} style="height: 50px; width: 70px; object-fit: cover; border-radius: 5px">')
 
     get_image.short_description = 'Miniature'
 
@@ -95,18 +108,20 @@ class OfferInline(admin.TabularInline):
 
 @admin.register(Tour)
 class TourAdmin(admin.ModelAdmin):
-    list_display = ('get_image', 'title', 'city', 'active', 'duration', 'views', 'publication_date')
+    list_display = ('get_image', 'title', 'city', 'active', 'future', 'duration', 'views', 'publication_date')
     search_fields = ('title',)
-    list_editable = ('active',)
+    list_editable = ('active', 'future')
     list_display_links = ('get_image', 'title')
-    list_filter = ('city', 'category', 'publication_date', 'update_date')
+    list_filter = (('city', admin.RelatedOnlyFieldListFilter), ('category', admin.RelatedOnlyFieldListFilter),
+                   'publication_date', 'update_date', )
     readonly_fields = ('get_image', 'views', 'rating')
     inlines = [OfferInline, TourImageInline]
     filter_horizontal = ('category',)
 
     def get_image(self, obj):
-        return mark_safe(
-            f'<img src={obj.image.url} style="height: 50px; width: 70px; object-fit: cover; border-radius: 5px">')
+        if obj.image:
+            return mark_safe(
+                f'<img src={obj.image.url} style="height: 50px; width: 70px; object-fit: cover; border-radius: 5px">')
 
     get_image.short_description = 'Miniature'
 

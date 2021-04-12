@@ -26,6 +26,7 @@ SECRET_KEY = 'sr79o%esvu8(p%$vt(ed1^5eyd9tu7ukmc2zv33pre-z&mj@gi'
 DEBUG = True
 
 ALLOWED_HOSTS = ['192.168.0.199']
+BACKEND_URL = ['http://192.168.0.199:8000']
 
 # Application definition
 

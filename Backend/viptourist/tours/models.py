@@ -7,8 +7,8 @@ from seller.models import Seller
 
 class Category(models.Model):
     title = models.CharField('Category title', max_length=255, db_index=True)
-    image = ThumbnailerImageField(upload_to='categories/', resize_source={'size': (400, 400), 'crop': 'scale'})
     slug = models.SlugField(unique=True, db_index=True)
+    image = ThumbnailerImageField(upload_to='categories/', resize_source={'size': (300, 300), 'crop': 'scale'})
     order = models.PositiveIntegerField(null=True, blank=True)
 
     def __str__(self):
@@ -34,9 +34,9 @@ class Country(models.Model):
 class City(models.Model):
     country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True, related_name='cities')
     title = models.CharField(max_length=255, db_index=True)
-    image = ThumbnailerImageField(upload_to='tours/', resize_source={'size': (400, 400), 'crop': 'scale'}, blank=True,
-                                  null=True)
     slug = models.SlugField(db_index=True, unique=True)
+    image = ThumbnailerImageField(upload_to='tours/', resize_source={'size': (300, 300), 'crop': 'scale'}, blank=True,
+                                  null=True)
     order = models.PositiveSmallIntegerField(null=True, blank=True)
 
     def __str__(self):
@@ -44,7 +44,7 @@ class City(models.Model):
 
     class Meta:
         verbose_name_plural = 'Cities'
-        ordering = ('order',)
+        ordering = ('order', 'title')
 
 
 class Tour(models.Model):
@@ -55,13 +55,14 @@ class Tour(models.Model):
     duration = models.DecimalField('Duration (hours)', max_digits=3, decimal_places=2, default=0)
     short_description = RichTextUploadingField()
     description = RichTextUploadingField()
-    important_information = RichTextUploadingField(null=True)
-    not_suitable_for = models.TextField(help_text='the list must be separated by commas', null=True)
-    will_need = models.TextField(help_text='the list must be separated by commas', null=True)
-    prohibited = models.TextField(help_text='the list must be separated by commas', null=True)
+    important_information = RichTextUploadingField(null=True, blank=True)
+    not_suitable_for = models.TextField(help_text='the list must be separated by commas', null=True, blank=True)
+    will_need = models.TextField(help_text='the list must be separated by commas', null=True, blank=True)
+    prohibited = models.TextField(help_text='the list must be separated by commas', null=True, blank=True)
     views = models.IntegerField(default=0)
     rating = models.PositiveSmallIntegerField(default=5)
     active = models.BooleanField(default=False)
+    future = models.BooleanField(default=False)
     publication_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now_add=True)
 
@@ -74,7 +75,7 @@ class Tour(models.Model):
 
 class TourImage(models.Model):
     tour = models.ForeignKey(Tour, on_delete=models.SET_NULL, null=True, blank=True, related_name='images')
-    image = ThumbnailerImageField(upload_to='tours/', resize_source={'size': (1000, 1000), 'crop': 'scale'})
+    image = ThumbnailerImageField(upload_to='tours/', resize_source={'size': (800, 800), 'crop': 'scale'})
     order = models.PositiveSmallIntegerField(null=True, blank=True)
 
     def __str__(self):
@@ -135,7 +136,7 @@ class Offer(models.Model):
 
 class OfferImage(models.Model):
     offer = models.ForeignKey(Offer, on_delete=models.SET_NULL, null=True, blank=True, related_name='images')
-    image = ThumbnailerImageField(upload_to='tours/', resize_source={'size': (1000, 1000), 'crop': 'scale'})
+    image = ThumbnailerImageField(upload_to='tours/', resize_source={'size': (800, 800), 'crop': 'scale'})
 
     def __str__(self):
         return f'{self.id}'

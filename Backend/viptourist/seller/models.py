@@ -1,14 +1,16 @@
 from django.contrib.auth.models import User
 from django.db import models
 from easy_thumbnails.fields import ThumbnailerImageField
+from mainapp.models import AppUser
 
 
 class Seller(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='seller')
+    user = models.OneToOneField(AppUser, on_delete=models.SET_NULL, null=True, blank=True)
     company = models.CharField(max_length=255, db_index=True)
     name = models.CharField(max_length=255)
     phone = models.CharField(max_length=25)
     whatsapp = models.CharField(max_length=25)
+    email = models.EmailField(null=True, blank=True)
     avatar = ThumbnailerImageField(upload_to='sellers/', resize_source={'size': (300, 300), 'crop': 'scale'})
     active = models.BooleanField(default=False)
     balance = models.DecimalField(max_digits=6, decimal_places=2)

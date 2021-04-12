@@ -39,7 +39,7 @@ class ReviewPhotoInline(admin.TabularInline):
 
 @admin.register(Tourist)
 class TouristAdmin(admin.ModelAdmin):
-    list_display = ('get_image', 'user', 'name', 'phone', 'whatsapp', 'active', 'balance', 'register_date')
+    list_display = ('get_image', 'user', 'name', 'phone', 'whatsapp', 'email', 'active', 'balance', 'register_date')
     list_editable = ('active',)
     readonly_fields = ('get_image_full_size', 'user', 'name', 'phone', 'whatsapp', 'balance', 'register_date', 'updated',
                        'avatar')
