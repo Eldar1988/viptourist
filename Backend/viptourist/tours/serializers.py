@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from .models import Country, City, Tour, Category
+from .models import Country, City, Tour, Category, TourImage
 
 
 class CityListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = City
-        exclude = ('order', 'country')
+        exclude = ('order',)
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -21,15 +21,14 @@ class TourListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tour
-        fields = ('id', 'title', 'image', 'duration', 'views', 'rating')
+        fields = ('id', 'title', 'image', 'rating', 'reviews_count', 'offers_minimal_price')
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
-    tours = TourListSerializer(many=True, read_only=True)
 
     class Meta:
         model = Category
-        fields = ('id', 'title', 'tours')
+        fields = ('id', 'title')
 
 
 class CitySearchListSerializer(serializers.ModelSerializer):
@@ -39,5 +38,19 @@ class CitySearchListSerializer(serializers.ModelSerializer):
         model = City
         fields = ('id', 'title', 'country', 'slug')
 
+
+class TourImagesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TourImage
+        fields = ('id', 'image')
+
+
+class TourDetailSerializer(serializers.ModelSerializer):
+    images = TourImagesSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Tour
+        exclude = ('active', 'future', 'order', 'update_date')
 
 

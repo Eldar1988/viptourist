@@ -1,11 +1,14 @@
+from django.http import HttpResponse
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 from .serializers import CityListSerializer, CountrySerializer, TourListSerializer, CategoryListSerializer, \
-    CitySearchListSerializer
+    CitySearchListSerializer, TourDetailSerializer
 from .models import Country, Category, City, Tour
+
+from .service import ToursPagination
 
 
 class CountriesListView(generics.ListAPIView):
@@ -14,10 +17,48 @@ class CountriesListView(generics.ListAPIView):
     serializer_class = CountrySerializer
 
 
-class ToursListSortedByCategoryView(APIView):
-    """Tours list sorted by category. Filters: city :str, price :float, start_time :str """
-    def get(self, request, city_slug):
-        categories = Category.objects.filter(tours__city__slug=city_slug).distinct()
+class CityDetailView(generics.RetrieveAPIView):
+    """City Detail"""
+    queryset = City.objects.all()
+    serializer_class = CityListSerializer
 
-        serializer = CategoryListSerializer(categories, many=True)
-        return Response(serializer.data)
+
+class CategoriesByCityView(generics.ListAPIView):
+    """Categories by city id"""
+    serializer_class = CategoryListSerializer
+
+    def get_queryset(self):
+        categories = Category.objects.filter(tours__city_id=self.kwargs['pk']).distinct()
+        return categories
+
+
+class ToursByCityAndCategoryView(generics.ListAPIView):
+    """Tours list: params 'city=id', 'category=id'"""
+    serializer_class = TourListSerializer
+
+    def get_queryset(self):
+        tours = Tour.objects.filter(city_id=self.request.query_params['city'], category__id=self.request.query_params['category'], future=True, active=True)
+        return tours
+
+
+class ToursCountByCityView(APIView):
+    """Tours count by city id"""
+    def get(self, request, pk):
+        tours_count = Tour.objects.filter(city_id=pk).count()
+        return HttpResponse(tours_count)
+
+
+class ToursByCityView(generics.ListAPIView):
+    """All tours by city id"""
+    serializer_class = TourListSerializer
+    pagination_class = ToursPagination
+
+    def get_queryset(self):
+        tours = Tour.objects.filter(city_id=self.kwargs['pk'])
+        return tours
+
+
+class TourDetailView(generics.RetrieveAPIView):
+    """Tour detail by id"""
+    queryset = Tour.objects.all()
+    serializer_class = TourDetailSerializer

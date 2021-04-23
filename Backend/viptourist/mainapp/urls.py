@@ -6,5 +6,6 @@ urlpatterns = [
     path('home_slides/', views.SlidesListView.as_view()),
     path('contacts/', views.ContactsView.as_view()),
     path('faq/', views.FaqView.as_view()),
-    path('search_faq/', views.SearchFagView.as_view())
+    path('search_faq/', views.SearchFagView.as_view()),
+    path('get_policy/', views.PolicyView.as_view())
 ]

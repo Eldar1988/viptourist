@@ -1,10 +1,13 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
+from modeltranslation.admin import TranslationAdmin
 
-from .models import HomeSlide, Faq, Contact, AppUser
+from .models import HomeSlide, Faq, Contact, AppUser, PublicOffer, PrivacyPolicy
 
 
 admin.site.register(Contact)
+admin.site.register(PublicOffer)
+admin.site.register(PrivacyPolicy)
 
 
 @admin.register(AppUser)
@@ -14,15 +17,15 @@ class AppUserAdmin(admin.ModelAdmin):
 
 
 @admin.register(Faq)
-class FaqAdmin(admin.ModelAdmin):
+class FaqAdmin(TranslationAdmin):
     list_display = ('question', 'order')
     list_editable = ('order',)
     search_fields = ('question', 'answer')
 
 
 @admin.register(HomeSlide)
-class HomeSlideAdmin(admin.ModelAdmin):
-    list_display = ('get_image', 'order')
+class HomeSlideAdmin(TranslationAdmin):
+    list_display = ('get_image', 'title', 'order')
     list_editable = ('order',)
     readonly_fields = ('get_image',)
 

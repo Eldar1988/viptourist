@@ -13,7 +13,9 @@ class Seller(models.Model):
     email = models.EmailField(null=True, blank=True)
     avatar = ThumbnailerImageField(upload_to='sellers/', resize_source={'size': (300, 300), 'crop': 'scale'})
     active = models.BooleanField(default=False)
-    balance = models.DecimalField(max_digits=6, decimal_places=2)
+    balance = models.DecimalField('Balance USD', max_digits=10, decimal_places=2)
+    rating = models.DecimalField(null=True, blank=True, max_digits=4, decimal_places=1)
+    reviews_count = models.IntegerField(default=0)
     register_date = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

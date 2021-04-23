@@ -32,15 +32,15 @@ class SellerActionsInline(admin.TabularInline):
 
 @admin.register(Seller)
 class SellerAdmin(admin.ModelAdmin):
-    list_display = ('get_image', 'user', 'company', 'name', 'phone', 'whatsapp', 'email', 'active', 'balance',
+    list_display = ('get_image', 'user', 'company', 'name', 'phone', 'whatsapp', 'email', 'active', 'balance', 'rating',
                     'register_date')
     list_editable = ('active',)
-    list_filter = ('active', 'register_date', 'updated')
+    list_filter = ('active', 'rating', 'register_date', 'updated')
     search_fields = ('name', 'company', 'phone', 'whatsapp')
     list_display_links = ('get_image', 'user', 'company', 'name')
     inlines = [DocumentsInline, SellerNotificationsInline, SellerActionsInline]
-    readonly_fields = ('get_image_full_size', 'company', 'name', 'phone', 'whatsapp', 'balance',
-                       'register_date', 'updated', 'avatar')
+    # readonly_fields = ('get_image_full_size', 'company', 'name', 'phone', 'whatsapp', 'balance',
+    #                    'register_date', 'updated', 'avatar')
 
     def get_image(self, obj):
         return mark_safe(

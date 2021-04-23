@@ -1,9 +1,14 @@
-from django.contrib.auth.models import User
 from django.db import models
 from easy_thumbnails.fields import ThumbnailerImageField
+from django.db.models import signals
+from django.dispatch import receiver
+
+
 from tours.models import Tour, Offer
 from seller.models import Seller
 from mainapp.models import AppUser
+
+from .models_service import ratings_update
 
 
 class Tourist(models.Model):

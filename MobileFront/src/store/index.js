@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import cities from './modules/ctites'
+import categories from './modules/categories'
 
 // import example from './module-example'
 
@@ -18,7 +19,8 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      cities
+      cities,
+      categories
     },
 
     state: {

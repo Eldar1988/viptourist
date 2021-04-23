@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
+
 from .models import Tourist, TourReview, ReviewPhoto, ForTouristNotification, ForAllTouristNotification, TouristAction
 
 
@@ -64,10 +65,11 @@ class TouristAdmin(admin.ModelAdmin):
 @admin.register(TourReview)
 class TourReviewAdmin(admin.ModelAdmin):
     list_display = ('id', 'tour', 'offer', 'seller', 'tourist', 'rating', 'public', 'date')
-    readonly_fields = ('id', 'tour', 'offer', 'seller', 'tourist', 'rating', 'date', 'text')
+    # readonly_fields = ('id', 'tour', 'offer', 'seller', 'tourist', 'rating', 'date', 'text')
     list_editable = ('public',)
     search_fields = ('tour__title', 'seller__name', 'seller__company', 'text')
     list_filter = ('public', 'rating')
+    save_as = True
 
     inlines = [ReviewPhotoInline]
 

@@ -1,5 +1,6 @@
 from django.db import models
 from easy_thumbnails.fields import ThumbnailerImageField
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class AppUser(models.Model):
@@ -19,6 +20,7 @@ class AppUser(models.Model):
 
 class HomeSlide(models.Model):
     image = ThumbnailerImageField(upload_to='home_slides/', resize_source={'size': (1000, 1000), 'crop': 'scale'})
+    title = models.CharField(max_length=150, null=True, blank=True)
     order = models.PositiveSmallIntegerField(default=1)
 
     def __str__(self):
@@ -49,3 +51,27 @@ class Contact(models.Model):
 
     def __str__(self):
         return f'Contact information v{self.id}'
+
+
+class PrivacyPolicy(models.Model):
+    title = models.CharField(max_length=255)
+    body = RichTextUploadingField()
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'Privacy policy'
+        verbose_name_plural = 'Privacy policy'
+
+
+class PublicOffer(models.Model):
+    title = models.CharField(max_length=255)
+    body = RichTextUploadingField()
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'Public offer'
+        verbose_name_plural = 'Public offer'

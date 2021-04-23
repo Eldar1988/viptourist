@@ -14,7 +14,7 @@
         :img-src="slide.image"
       >
         <div class="flex flex-center q-px-sm" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0">
-          <h1 class="text-h1 text-bold text-white">Приветственный текст</h1>
+          <h1 class="text-h1 text-bold text-white">{{ slide.title }}</h1>
         </div>
       </q-carousel-slide>
     </q-carousel>
@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import notifier from "src/utils/notifier"
+
 export default {
   name: "vipHomeSlider",
   data() {
@@ -35,7 +37,16 @@ export default {
   },
   methods: {
     async loadSlides() {
-      this.slides = await this.$axios.get(`${this.$store.getters.getServerURL}/main/home_slides/`).then(({data}) => data)
+      try {
+        this.slides = await this.$axios.get(`${this.$store.getters.getServerURL}/main/home_slides/`).then(({data}) => data)
+      }
+      catch (e) {
+        notifier(e.message)
+        setTimeout(() => {
+          location.reload()
+        }, 4000)
+      }
+
     }
   }
 }

@@ -15,7 +15,8 @@
     "core-js": "^3.6.5",
     "quasar": "^1.0.0",
     "swiper": "^6.5.6",
-    "vue-awesome-swiper": "^4.1.1"
+    "vue-awesome-swiper": "^4.1.1",
+    "vue-i18n": "^9.1.4"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",

@@ -31,6 +31,7 @@ BACKEND_URL = ['http://192.168.0.199:8000']
 # Application definition
 
 INSTALLED_APPS = [
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'easy_thumbnails',
     'drf_yasg',
+    'rangefilter',
 
     'tours',
     'seller',
@@ -56,6 +58,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -136,11 +139,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CORS_ORIGIN_ALLOW_ALL = True
 
 REST_FRAMEWORK = {
-    'DATE_FORMAT': "%d.%m.%Y",
-    'TIME_FORMAT': "%H:%M",
-    # 'DEFAULT_AUTHENTICATION_CLASSES': (
-    #     'rest_framework_simplejwt.authentication.JWTAuthentication',
-    # ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 200,
 }
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
@@ -172,14 +172,11 @@ CACHES = {
     }
 }
 
-# JWT_AUTH = {
-#     # how long the original token is valid for
-#     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=100),
-#
-#     # allow refreshing of tokens
-#     'JWT_ALLOW_REFRESH': False,
-#
-#     # this is the maximum time AFTER the token was issued that
-#     # it can be refreshed.  exprired tokens can't be refreshed.
-#     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
-# }
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'
+MODELTRANSLATION_AUTO_POPULATE = True
+
+gettext = lambda s: s
+LANGUAGES = (
+    ('ru', gettext('Russian')),
+    ('en', gettext('English')),
+)

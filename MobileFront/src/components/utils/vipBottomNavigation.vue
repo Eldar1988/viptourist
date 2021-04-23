@@ -7,7 +7,8 @@
         label="Поиск"
         icon="las la-search"
         color="dark"
-        dense stack no-caps flat
+        dense stack no-caps flat stretch
+        class="full-width"
       />
       </div>
       <div class="text-center">
@@ -15,7 +16,8 @@
           label="Избранное"
           icon="lar la-heart"
           color="dark"
-          dense stack no-caps flat
+          dense stack no-caps flat stretch
+          class="full-width"
         />
       </div>
       <div class="text-center">
@@ -23,7 +25,8 @@
           label="Заказы"
           icon="las la-clipboard-list"
           color="dark"
-          flat dense stack no-caps
+          flat dense stack no-caps stretch
+          class="full-width"
         />
       </div>
       <div class="text-center">
@@ -31,7 +34,8 @@
           label="Профиль"
           icon="lar la-user"
           color="dark"
-          flat dense stack no-caps
+          flat dense stack no-caps stretch
+          class="full-width"
         />
       </div>
     </div>

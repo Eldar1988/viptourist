@@ -7,6 +7,14 @@ const routes = [
       { path: '', component: () => import('pages/Index.vue') }
     ]
   },
+  {
+    path: '/city/:id',
+    params: 'id',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/CityDetail') }
+    ]
+  },
 
   // Always leave this as last one,
   // but you can also remove it

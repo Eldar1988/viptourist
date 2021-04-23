@@ -3,7 +3,8 @@ import notifier from "src/utils/notifier"
 
 export default {
   state: {
-    countries: null
+    countries: null,
+    city: null,
   },
   actions: {
     async loadCountriesAndCities({commit, state}) {
@@ -15,14 +16,26 @@ export default {
       } catch (e) {
         notifier(e.message)
       }
+    },
+    async loadCityDetail({commit}, id) {
+      try{
+        return axios.get(`${this.getters.getServerURL}/tours/city/${id}/`)
+          .then(({data}) => commit('setCityDetail', data))
+      } catch (e) {
+        notifier(e.message)
+      }
     }
   },
   mutations: {
     setCountries(state, data) {
       state.countries = data
+    },
+    setCityDetail(state, data) {
+      state.city = data
     }
-  },
+   },
   getters: {
-    getCountries: state => state.countries
+    getCountries: state => state.countries,
+    getCityDetail: state => state.city
   }
 }
